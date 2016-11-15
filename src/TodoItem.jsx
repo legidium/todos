@@ -11,6 +11,11 @@ export class TodoItem extends React.Component {
 		this.state = {
 			editText: this.props.todo.title
 		};
+
+		this.handleEdit    = this.handleEdit.bind(this);
+		this.handleSubmit  = this.handleSubmit.bind(this);
+		this.handleChange  = this.handleChange.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -39,6 +44,7 @@ export class TodoItem extends React.Component {
 			})}>
 
 				<div className="view">
+
 					<input
 						className="toggle"
 						type="checkbox"
@@ -46,7 +52,7 @@ export class TodoItem extends React.Component {
 						onChange={this.props.onToggle}
 					/>
 
-					<label onDoubleClick={this.handleEdit.bind(this)}>
+					<label onDoubleClick={this.handleEdit}>
 						{todo.title}
 					</label>
 
@@ -55,12 +61,12 @@ export class TodoItem extends React.Component {
 				</div>
 
 				<input
-					ref={input => this.editField = input}
 					className="edit"
+					ref={input => this.editField = input}
 					value={this.state.editText}
-					onBlur={this.handleSubmit.bind(this)}
-					onChange={this.handleChange.bind(this)}
-					onKeyDown={this.handleKeyDown.bind(this)}
+					onBlur={this.handleSubmit}
+					onChange={this.handleChange}
+					onKeyDown={this.handleKeyDown}
 				/>
 
 			</li>
@@ -85,13 +91,16 @@ export class TodoItem extends React.Component {
 
 	handleKeyDown(event) {
 		switch (event.which) {
+
 			case keys.ESCAPE_KEY:
 				this.setState({ editText: this.props.todo.title });
 				this.props.onCancel(event);
 				break;
+
 			case keys.ENTER_KEY:
 				this.handleSubmit(event);
 				break;
+
 			default: // no action
 		}
 	}

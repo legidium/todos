@@ -22,6 +22,7 @@ export class TodoModel {
 			title:     title,
 			completed: false
 		});
+
 		this.inform();
 	}
 
@@ -29,6 +30,7 @@ export class TodoModel {
 		this.todos = this.todos.map(todo =>
 			utils.extend({}, todo, { completed: checked })
 		);
+
 		this.inform();
 	}
 
@@ -36,11 +38,13 @@ export class TodoModel {
 		this.todos = this.todos.map(todo =>
 			todo === todoToToggle ? utils.extend({}, todo, { completed: !todo.completed }) : todo
 		);
+
 		this.inform();
 	}
 
 	destroy(todo) {
 		this.todos = this.todos.filter(candidate => candidate !== todo);
+
 		this.inform();
 	}
 
@@ -48,11 +52,13 @@ export class TodoModel {
 		this.todos = this.todos.map(todo =>
 			todo === todoToSave	? utils.extend({}, todo, { title: text }) : todo
 		);
+
 		this.inform();
 	}
 
 	clearCompleted() {
 		this.todos = this.todos.filter(todo => !todo.completed);
+
 		this.inform();
 	}
 }

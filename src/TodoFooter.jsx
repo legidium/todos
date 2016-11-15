@@ -1,8 +1,8 @@
 import React      from 'react';
 import classNames from 'classnames';
 
-import utils      from './utils';
 import { filter } from './constants';
+import utils      from './utils';
 
 export const TodoFooter = ({ count, completedCount, nowShowing, onClearCompleted }) => (
 	<footer className="footer">
@@ -16,10 +16,11 @@ export const TodoFooter = ({ count, completedCount, nowShowing, onClearCompleted
 				{ link: '#/',          text: 'All',       active: nowShowing === filter.ALL_TODOS },
 				{ link: '#/active',    text: 'Active',    active: nowShowing === filter.ACTIVE_TODOS },
 				{ link: '#/completed', text: 'Completed', active: nowShowing === filter.COMPLETED_TODOS }
-			].map(i => (
-				<li>
-					<a href={i.link} className={classNames({ selected: i.active })}>
-						{i.text}
+
+			].map((item, index) => (
+				<li key={index}>
+					<a href={item.link} className={classNames({ selected: item.active })}>
+						{item.text}
 					</a>
 				</li>
 			))}
