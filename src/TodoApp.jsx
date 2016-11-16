@@ -5,181 +5,180 @@ import { Router }       from './utils/director';
 
 import TodoItem   from './TodoItem';
 import TodoFooter from './TodoFooter';
-import TodoModel  from './TodoModel';
 
 class TodoApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-            newTodo:    '',
-            editing:    null,
-            nowShowing: filter.ALL_TODOS
-        };
-    }
+      newTodo: '',
+      editing: null,
+      nowShowing: filter.ALL_TODOS
+    };
+  }
 
-    componentDidMount() {
-        const router = Router({
-            '/':          this.setState.bind(this, { nowShowing: filter.ALL_TODOS }),
-            '/active':    this.setState.bind(this, { nowShowing: filter.ACTIVE_TODOS }),
-            '/completed': this.setState.bind(this, { nowShowing: filter.COMPLETED_TODOS })
-        });
+  componentDidMount() {
+    const router = Router({
+      '/': this.setState.bind(this, { nowShowing: filter.ALL_TODOS }),
+      '/active': this.setState.bind(this, { nowShowing: filter.ACTIVE_TODOS }),
+      '/completed': this.setState.bind(this, { nowShowing: filter.COMPLETED_TODOS })
+    });
 
-        router.init('/');
-    }
+    router.init('/');
+  }
 
-    render() {
-        const { todos } = this.props.model;
-        const activeTodoCount = todos.reduce((accum, todo) => todo.completed ? accum : accum + 1, 0);
-        const completedCount  = todos.length - activeTodoCount;
+  render() {
+    const { todos }       = this.props.model;
+    const activeTodoCount = todos.reduce((accum, todo) => todo.completed ? accum : accum + 1, 0);
+    const completedCount  = todos.length - activeTodoCount;
 
-        const header = this.renderHeader();
-        const main   = this.renderMain({ todos, activeTodoCount });
-        const footer = this.renderFooter({ activeTodoCount, completedCount });
+    const header = this.renderHeader();
+    const main   = this.renderMain({ todos, activeTodoCount });
+    const footer = this.renderFooter({ activeTodoCount, completedCount });
 
-        return (
-            <div className="todoapp">
-                <div>
-                    {header}
-                    {main}
-                    {footer}
-                </div>
-            </div>
-        );
-    }
+    return (
+      <div className="todoapp">
+        <div>
+          {header}
+          {main}
+          {footer}
+        </div>
+      </div>
+    );
+  }
 
-    renderHeader() {
-        return (
-            <header className="header">
+  renderHeader() {
+    return (
+      <header className="header">
 
-                <h1>
-                    todos
-                </h1>
+        <h1>
+          todos
+        </h1>
 
-                <input
-                    className="new-todo"
-                    placeholder="What needs to be done?"
-                    autoFocus={true}
-                    value={this.state.newTodo}
-                    onKeyDown={this.handleNewTodoKeyDown.bind(this)}
-                    onChange={this.handleChange.bind(this)}
-                />
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus={true}
+          value={this.state.newTodo}
+          onKeyDown={this.handleNewTodoKeyDown.bind(this)}
+          onChange={this.handleChange.bind(this)}
+        />
 
-            </header>
-        )
-    }
+      </header>
+    )
+  }
 
-    renderMain({ todos, activeTodoCount }) {
-        if (todos.length) {
+  renderMain({ todos, activeTodoCount }) {
+    if (todos.length) {
 
-            const shownTodos = todos.filter(todo => {
-                switch (this.state.nowShowing) {
-                    
-                    case filter.ACTIVE_TODOS:
-                        return !todo.completed;
+      const shownTodos = todos.filter(todo => {
+        switch (this.state.nowShowing) {
 
-                    case filter.COMPLETED_TODOS:
-                        return todo.completed;
+          case filter.ACTIVE_TODOS:
+            return !todo.completed;
 
-                    default:
-                        return true;
-                }
-            });
+          case filter.COMPLETED_TODOS:
+            return todo.completed;
 
-            return (
-                <section className="main">
-
-                    <input
-                        className="toggle-all"
-                        type="checkbox"
-                        checked={activeTodoCount === 0}
-                        onChange={this.toggleAll.bind(this)}
-                    />
-
-                    <ul className="todo-list">
-
-                        {shownTodos.map(todo =>
-                            <TodoItem
-                                key={todo.id}
-                                todo={todo}
-                                editing={this.state.editing === todo.id}
-                                onToggle={this.toggle.bind(this, todo)}
-                                onDestroy={this.destroy.bind(this, todo)}
-                                onEdit={this.edit.bind(this, todo)}
-                                onSave={this.save.bind(this, todo)}
-                                onCancel={this.cancel.bind(this)}
-                            />
-                        )}
-
-                    </ul>
-
-                </section>
-            );
+          default:
+            return true;
         }
+      });
+
+      return (
+        <section className="main">
+
+          <input
+            className="toggle-all"
+            type="checkbox"
+            checked={activeTodoCount === 0}
+            onChange={this.toggleAll.bind(this)}
+          />
+
+          <ul className="todo-list">
+
+            {shownTodos.map(todo =>
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                editing={this.state.editing === todo.id}
+                onToggle={this.toggle.bind(this, todo)}
+                onDestroy={this.destroy.bind(this, todo)}
+                onEdit={this.edit.bind(this, todo)}
+                onSave={this.save.bind(this, todo)}
+                onCancel={this.cancel.bind(this)}
+              />
+            )}
+
+          </ul>
+
+        </section>
+      );
     }
+  }
 
-    renderFooter({ activeTodoCount, completedCount }) {
-        if (activeTodoCount || completedCount) {
-            return (
-                <TodoFooter
-                    count={activeTodoCount}
-                    completedCount={completedCount}
-                    nowShowing={this.state.nowShowing}
-                    onClearCompleted={this.clearCompleted.bind(this)}
-                />
-            );
-        }
+  renderFooter({ activeTodoCount, completedCount }) {
+    if (activeTodoCount || completedCount) {
+      return (
+        <TodoFooter
+          count={activeTodoCount}
+          completedCount={completedCount}
+          nowShowing={this.state.nowShowing}
+          onClearCompleted={this.clearCompleted.bind(this)}
+        />
+      );
     }
+  }
 
-    handleChange(event) {
-        this.setState({ newTodo: event.target.value });
+  handleChange(event) {
+    this.setState({ newTodo: event.target.value });
+  }
+
+  handleNewTodoKeyDown(event) {
+    if (event.keyCode !== keys.ENTER_KEY) return;
+
+    event.preventDefault();
+
+    const value = this.state.newTodo.trim();
+
+    if (value) {
+      this.props.model.addTodo(value);
+      this.setState({ newTodo: '' });
     }
+  }
 
-    handleNewTodoKeyDown(event) {
-        if (event.keyCode !== keys.ENTER_KEY) return;
+  toggleAll(event) {
+    this.props.model.toggleAll(event.target.checked);
+  }
 
-        event.preventDefault();
+  toggle(todo) {
+    this.props.model.toggle(todo);
+  }
 
-        const value = this.state.newTodo.trim();
+  destroy(todo) {
+    this.props.model.destroy(todo);
+  }
 
-        if (value) {
-            this.props.model.addTodo(value);
-            this.setState({ newTodo: '' });
-        }
-    }
+  edit(todo) {
+    this.setState({ editing: todo.id });
+  }
 
-    toggleAll(event) {
-        this.props.model.toggleAll(event.target.checked);
-    }
+  save(todo, text) {
+    this.props.model.save(todo, text);
+    this.setState({ editing: null });
+  }
 
-    toggle(todo) {
-        this.props.model.toggle(todo);
-    }
+  cancel() {
+    this.setState({ editing: null });
+  }
 
-    destroy(todo) {
-        this.props.model.destroy(todo);
-    }
-
-    edit(todo) {
-        this.setState({ editing: todo.id });
-    }
-
-    save(todo, text) {
-        this.props.model.save(todo, text);
-        this.setState({ editing: null });
-    }
-
-    cancel() {
-        this.setState({ editing: null });
-    }
-
-    clearCompleted() {
-        this.props.model.clearCompleted();
-    }
+  clearCompleted() {
+    this.props.model.clearCompleted();
+  }
 }
 
 TodoApp.propTypes = {
-    model: React.PropTypes.instanceOf(TodoModel).isRequired
+  model: React.PropTypes.object.isRequired
 };
 
 export default TodoApp;

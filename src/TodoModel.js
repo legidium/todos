@@ -1,66 +1,66 @@
 import utils from './utils';
 
 export class TodoModel {
-	constructor(key) {
-		this.key       = key;
-		this.todos     = utils.store(key);
-		this.onChanges = [];
-	}
+  constructor(key) {
+    this.key       = key;
+    this.todos     = utils.store(key);
+    this.onChanges = [];
+  }
 
-	subscribe(onChange) {
-		this.onChanges.push(onChange);
-	}
+  subscribe(onChange) {
+    this.onChanges.push(onChange);
+  }
 
-	inform() {
-		utils.store(this.key, this.todos);
-		this.onChanges.forEach(cb => cb());
-	}
+  inform() {
+    utils.store(this.key, this.todos);
+    this.onChanges.forEach(cb => cb());
+  }
 
-	addTodo(title) {
-		this.todos = this.todos.concat({
-			id:        utils.uuid(),
-			title:     title,
-			completed: false
-		});
+  addTodo(title) {
+    this.todos = this.todos.concat({
+      id:        utils.uuid(),
+      title:     title,
+      completed: false
+    });
 
-		this.inform();
-	}
+    this.inform();
+  }
 
-	toggleAll(checked) {
-		this.todos = this.todos.map(todo =>
-			utils.extend({}, todo, { completed: checked })
-		);
+  toggleAll(checked) {
+    this.todos = this.todos.map(todo =>
+      utils.extend({}, todo, { completed: checked })
+    );
 
-		this.inform();
-	}
+    this.inform();
+  }
 
-	toggle(todoToToggle) {
-		this.todos = this.todos.map(todo =>
-			todo === todoToToggle ? utils.extend({}, todo, { completed: !todo.completed }) : todo
-		);
+  toggle(todoToToggle) {
+    this.todos = this.todos.map(todo =>
+      todo === todoToToggle ? utils.extend({}, todo, { completed: !todo.completed }) : todo
+    );
 
-		this.inform();
-	}
+    this.inform();
+  }
 
-	destroy(todo) {
-		this.todos = this.todos.filter(candidate => candidate !== todo);
+  destroy(todo) {
+    this.todos = this.todos.filter(candidate => candidate !== todo);
 
-		this.inform();
-	}
+    this.inform();
+  }
 
-	save(todoToSave, text) {
-		this.todos = this.todos.map(todo =>
-			todo === todoToSave	? utils.extend({}, todo, { title: text }) : todo
-		);
+  save(todoToSave, text) {
+    this.todos = this.todos.map(todo =>
+      todo === todoToSave	? utils.extend({}, todo, { title: text }) : todo
+    );
 
-		this.inform();
-	}
+    this.inform();
+  }
 
-	clearCompleted() {
-		this.todos = this.todos.filter(todo => !todo.completed);
+  clearCompleted() {
+    this.todos = this.todos.filter(todo => !todo.completed);
 
-		this.inform();
-	}
+    this.inform();
+  }
 }
 
 export default TodoModel;
